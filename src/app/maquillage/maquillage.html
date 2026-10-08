@@ -1,0 +1,64 @@
+<div class="container mt-4">
+
+  <h2 class="text-center mb-4">Liste des Maquillages</h2>
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Référence</th>
+        <th>Marque</th>
+        <th>Produit</th>
+        <th>Catégorie</th>
+        <th>Prix</th>
+        <th>Date de création</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (maquillage of maquillages; track $index) {
+
+        <tr>
+          <td>{{ maquillage.idMaquillage }}</td>
+          <td>{{ maquillage.reference }}</td>
+          <td>{{ maquillage.marque }}</td>
+          <td>{{ maquillage.nomProduit }}</td>
+          <td>{{ maquillage.categorie }}</td>
+          <td>{{ maquillage.prix }} DT</td>
+          <td>{{ maquillage.dateCreation }}</td>
+
+          <td>
+            <a
+              class="btn btn-primary btn-sm me-2"
+              [routerLink]="['/modifier-maquillage', maquillage.idMaquillage]">
+              Modifier
+            </a>
+
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="supprimerMaquillage(maquillage.idMaquillage)">
+              Supprimer
+            </button>
+          </td>
+        </tr>
+
+      }
+
+      @empty {
+
+        <tr>
+          <td colspan="8" class="text-center">
+            Aucun maquillage trouvé
+          </td>
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>
