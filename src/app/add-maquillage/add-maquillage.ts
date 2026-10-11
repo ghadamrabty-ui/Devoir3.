@@ -1,34 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { Maquillage } from '../maquillage.model';
+import { Maquillage } from '../model/maquillage.model';
 import { MaquillageService } from '../maquillage.service';
+import { TypeMaquillage } from '../model/type.model';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-maquillage',
-  imports: [FormsModule, RouterLink],
+  imports: [CommonModule,FormsModule],
   templateUrl: './add-maquillage.html',
   styleUrl: './add-maquillage.css'
 })
-export class AddMaquillage {
+export class AddMaquillage implements OnInit {
 
-  maquillage: Maquillage = {
-    idMaquillage: 0,
-    reference: '',
-    marque: '',
-    nomProduit: '',
-    categorie: '',
-    prix: 0,
-    dateCreation: ''
-  };
+  newMaquillage = new Maquillage();
+  message! : string;
+  types! : TypeMaquillage[];
+  newIdType! : number;
+  newType! : TypeMaquillage;
 
-  constructor(
-    private maquillageService: MaquillageService,
-    private router: Router
-  ) {}
 
-  ajouterMaquillage() {
-    this.maquillageService.ajouterMaquillage(this.maquillage);
-    this.router.navigate(['/maquillage']);
+  constructor(private maquillageService: MaquillageService,
+              private router :Router
+   ) {}
+
+
+
+  ngOnInit() {
+    this.types = this.maquillageService.listeTypes();
   }
+
+
+
+  addMaquillage(){this.newType = this.maquillageService.consulterType(this.newIdType);
+    this.newMaquillage.type = this.newType;
+    this.maquillageService.ajouterMaquillage(this.newMaquillage);
+    this.router.navigate(['maquillage']);
+
+  }
+
+
 }

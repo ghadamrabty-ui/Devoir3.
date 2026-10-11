@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Maquillage } from '../maquillage.model';
+import { Maquillage } from '../model/maquillage.model';
 
 @Component({
   selector: 'app-maquillage',
