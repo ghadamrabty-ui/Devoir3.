@@ -13,8 +13,9 @@ import { RouterLink } from '@angular/router';
 export class MaquillageComponent implements OnInit  {
   maquillages! : Maquillage[]; //un tableau de Maquillage
   constructor(private maquillageService: MaquillageService ) {
-    this.maquillages = maquillageService.listeMaquillages();
-   }
+maquillageService.listeMaquillages().subscribe(maqs => {
+  this.maquillages = maqs;
+});   }
 
    ngOnInit() {
 

@@ -28,8 +28,9 @@ export class AddMaquillage implements OnInit {
 
 
   ngOnInit() {
-    this.types = this.maquillageService.listeTypes();
-  }
+this.maquillageService.listeTypes().subscribe(ts => {
+  this.types = ts._embedded.types;
+});  }
 
 
 

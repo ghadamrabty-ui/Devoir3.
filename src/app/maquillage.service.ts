@@ -1,15 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Maquillage } from './model/maquillage.model';
 import { TypeMaquillage } from './model/type.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { TypeWrapper } from './model/type.wrapper';
+
+const httpOptions = {
+  headers: new HttpHeaders( {'Content-Type': 'application/json'} )
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class MaquillageService {
-  maquillages: Maquillage[]; 
+  maquillages: Maquillage[];
   maquillage!: Maquillage;
   types: TypeMaquillage[];
+  apiURL: string = 'http://localhost:8080/produits/api';
+  apiURLCat: string = 'http://localhost:8080/produits/cat';
+  
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.types = [
       { idType: 1, nomType: 'Fond de teint' },
       { idType: 2, nomType: 'Rouge à lèvres' },
@@ -66,9 +77,12 @@ export class MaquillageService {
     ];
   }
 
-  listeMaquillages(): Maquillage[] {
-    return this.maquillages;
+  
+
+  listeMaquillages(): Observable<Maquillage[]> {
+    return of(this.maquillages);
   }
+  
 
   ajouterMaquillage(maq: Maquillage) {
     this.maquillages.push(maq);
@@ -86,30 +100,29 @@ export class MaquillageService {
     return this.maquillage;
   }
 
-  trierMaquillages() {
-    this.maquillages = this.maquillages.sort((n1, n2) => {
-      if (n1.idMaquillage! > n2.idMaquillage!) {
-        return 1;
-      }
-      if (n1.idMaquillage! < n2.idMaquillage!) {
-        return -1;
-      }
-      return 0;
-    });
-  }
-
   updateMaquillage(m: Maquillage) {
     this.supprimerMaquillage(m);
     this.ajouterMaquillage(m);
-    this.trierMaquillages();
   }
 
-  listeTypes():TypeMaquillage[] {
-    return this.types;
+  listeTypes(): Observable<TypeWrapper> {
+    return of({ _embedded: { types: this.types } });
   }
 
   consulterType(id:number): TypeMaquillage{
     return this.types.find(t => t.idType == id)!;
   }
+  updateProduit(prod: Maquillage): Observable<Maquillage> {
+    return this.http.put<Maquillage>(this.apiURL, prod, httpOptions);
+  }
+
+  rechercherPartype(idType: number): Observable<Maquillage[]> {
+  return of(this.maquillages.filter((m) => m.type.idType == idType));
+}
+  rechercherParNom(nom: string):Observable< Maquillage[]> {
+      const url = `${this.apiURL}/prodsByName/${nom}`;
+      return this.http.get<Maquillage[]>(url);
+      }
+      
 
 }
