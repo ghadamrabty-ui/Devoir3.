@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Maquillage } from '../model/maquillage.model';
 import { TypeMaquillage } from '../model/type.model';
-import { MaquillageService } from '../maquillage.service';
+import { MaquillageService } from '../services/maquillage.service';
 
 @Component({
   selector: 'app-recherche-partype',

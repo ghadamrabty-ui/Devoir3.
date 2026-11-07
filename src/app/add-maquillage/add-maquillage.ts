@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Maquillage } from '../model/maquillage.model';
-import { MaquillageService } from '../maquillage.service';
+import { MaquillageService } from '../services/maquillage.service';
 import { TypeMaquillage } from '../model/type.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';

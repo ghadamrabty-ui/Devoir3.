@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Maquillage } from './model/maquillage.model';
-import { TypeMaquillage } from './model/type.model';
+import { Maquillage } from '../model/maquillage.model';
+import { TypeMaquillage } from '../model/type.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { TypeWrapper } from './model/type.wrapper';
+import { TypeWrapper } from '../model/type.wrapper';
 
 const httpOptions = {
   headers: new HttpHeaders( {'Content-Type': 'application/json'} )

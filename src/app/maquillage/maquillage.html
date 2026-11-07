@@ -14,15 +14,11 @@
                <td>{{maquillage.nomProduit}}</td>
                <td>{{maquillage.prix}}</td>
                <td>{{maquillage.dateCreation | date:'dd/MM/yyyy'}}</td>
-
-               @if(maquillage.type){
-                <td>{{maquillage.type.nomType}}</td>  }
-               @else {
-                <td>'PAS DE TYPE'</td>
-                }
-
-               <td><a class="btn btn-danger" (click)="supprimerMaquillage(maquillage)">Supprimer</a></td>
-               <td><a class="btn btn-success" [routerLink]="['/modifier-maquillage',maquillage.idMaquillage]">Modifier</a></td>
+               <td>{{maquillage.type?.nomType}}</td>
+            @if(authService.isAdmin()) {
+            <td><a class="btn btn-danger" (click)="supprimerMaquillage(maquillage)">Supprimer</a></td>
+            <td><a class="btn btn-success" [routerLink]="['/modifier-maquillage',maquillage.idMaquillage]">Modifier</a></td>
+            }
              </tr>
           </tbody>
          }

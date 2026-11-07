@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Maquillage } from '../model/maquillage.model';
-import { MaquillageService } from '../maquillage.service';
+import { MaquillageService } from '../services/maquillage.service';
 import { searchFilterPipe } from '../search-filter.pipe';
 
 
