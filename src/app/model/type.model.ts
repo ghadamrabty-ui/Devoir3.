@@ -1,4 +1,4 @@
 export class TypeMaquillage {
-    idType! : number;
+    idType! : number|null;
     nomType! : string;
 }

@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="col-sm-4 col-md-4 col-lg-4 mb-4">
+    <app-updatetype 
+    [type]="updatedType" 
+    [ajout]="ajout" 
+    (typeUpdated)="typeUpdated($event)">
+    </app-updatetype>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr><th>Id</th><th>Nom type</th><th>Action</th></tr>
+        </thead>
+        @for (t of types; track t.idType) {
+          <tbody>
+            <tr>
+              <td>{{ t.idType }}</td>
+              <td>{{ t.nomType }}</td>
+              <td><a class="btn btn-success" (click)="updateType(t)">Editer</a></td>
+            </tr>
+          </tbody>
+        }
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,42 +1,66 @@
+
 <div class="container">
-    <div class="col-sm-4 col-md-4 col-lg-4 mb-4">
-        <label>Types </label>
-<select class="form-control form-control-lg" id="idType" name="idType" [(ngModel)]="idType" (change)="onTypeChange()">
-            @for(t of types;track t.idType)
-            {
-            <option value="{{t.idType}}"> {{t.nomType}} </option>
-            }
-            </select>
-    </div>
 
+  <div class="col-sm-4 col-md-4 col-lg-4 mb-4">
+    <label>Types</label>
 
-  <div class="card shadow mb-4">
-    <div class="card-body">
-     <table class="table table-striped">
-        <tr> <th>Id</th><th>Référence</th> <th>Marque</th> <th>Produit</th> <th>Prix</th>  <th>Date Création</th> <th>Type</th></tr>
-         @for (maquillage of maquillages; track maquillage.idMaquillage)
-         {
+    <select class="form-control form-control-lg"
+      id="idType" name="idType"
+      [(ngModel)]="idType"
+      (change)="onTypeChange()">
 
-          <tbody >
-            <tr >
-                <td>{{maquillage.idMaquillage}}</td>
-               <td>{{maquillage.reference}}</td>
-               <td>{{maquillage.marque}}</td>
-               <td>{{maquillage.nomProduit}}</td>
-               <td>{{maquillage.prix}}</td>
-               <td>{{maquillage.dateCreation | date:'dd/MM/yyyy'}}</td>
+      <option [ngValue]="undefined" disabled>
+       Choisir un type 
+      </option>
 
-               @if(maquillage.type){
-                <td>{{maquillage.type.nomType}}</td>  }
-               @else {
-                <td>PAS DE TYPE</td>
-                }
-             </tr>
-          </tbody>
-         }
-
-
-    </table>
-    </div>
+      @for (t of types; track t.idType) {
+        <option [ngValue]="t.idType">
+          {{ t.nomType }}
+        </option>
+      }
+    </select>
   </div>
+
+  @if (maquillages && maquillages.length > 0) {
+
+    <div class="card shadow mb-4">
+      <div class="card-body">
+
+        <table class="table table-striped">
+
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Référence</th>
+              <th>Marque</th>
+              <th>Produit</th>
+              <th>Prix</th>
+              <th>Date Création</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (maquillage of maquillages; track maquillage.idMaquillage) {
+              <tr>
+                <td>{{ maquillage.idMaquillage }}</td>
+                <td>{{ maquillage.reference }}</td>
+                <td>{{ maquillage.marque }}</td>
+                <td>{{ maquillage.nomProduit }}</td>
+                <td>{{ maquillage.prix }}</td>
+                <td>{{ maquillage.dateCreation | date:'dd/MM/yyyy' }}</td>
+                <td>{{ maquillage.type?.nomType }}</td>
+              </tr>
+            }
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  } @else {
+    <p>Aucun maquillage trouvé.</p>
+  }
+
 </div>

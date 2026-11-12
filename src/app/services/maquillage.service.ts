@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { Maquillage } from '../model/maquillage.model';
 import { TypeMaquillage } from '../model/type.model';
@@ -6,7 +7,7 @@ import { Observable, of } from 'rxjs';
 import { TypeWrapper } from '../model/type.wrapper';
 
 const httpOptions = {
-  headers: new HttpHeaders( {'Content-Type': 'application/json'} )
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
@@ -16,9 +17,9 @@ export class MaquillageService {
   maquillages: Maquillage[];
   maquillage!: Maquillage;
   types: TypeMaquillage[];
+
   apiURL: string = 'http://localhost:8080/produits/api';
-  apiURLCat: string = 'http://localhost:8080/produits/cat';
-  
+  apiURLCat: string = 'http://localhost:8081/produits/type';
 
   constructor(private http: HttpClient) {
     this.types = [
@@ -77,12 +78,9 @@ export class MaquillageService {
     ];
   }
 
-  
-
   listeMaquillages(): Observable<Maquillage[]> {
     return of(this.maquillages);
   }
-  
 
   ajouterMaquillage(maq: Maquillage) {
     this.maquillages.push(maq);
@@ -100,29 +98,44 @@ export class MaquillageService {
     return this.maquillage;
   }
 
-  updateMaquillage(m: Maquillage) {
-    this.supprimerMaquillage(m);
-    this.ajouterMaquillage(m);
-  }
+  updateMaquillage(m: Maquillage): Observable<Maquillage> {
+  return this.http.put<Maquillage>(
+    `${this.apiURL}/${m.idMaquillage}`,
+    m,
+    httpOptions
+  );
+}
 
-  listeTypes(): Observable<TypeWrapper> {
-    return of({ _embedded: { types: this.types } });
-  }
+listeTypes(): Observable<TypeWrapper> {
+  return this.http.get<TypeWrapper>(this.apiURLCat);
+}
 
-  consulterType(id:number): TypeMaquillage{
+
+  consulterType(id: number): TypeMaquillage {
     return this.types.find(t => t.idType == id)!;
-  }
-  updateProduit(prod: Maquillage): Observable<Maquillage> {
-    return this.http.put<Maquillage>(this.apiURL, prod, httpOptions);
   }
 
   rechercherPartype(idType: number): Observable<Maquillage[]> {
-  return of(this.maquillages.filter((m) => m.type.idType == idType));
-}
-  rechercherParNom(nom: string):Observable< Maquillage[]> {
-      const url = `${this.apiURL}/prodsByName/${nom}`;
-      return this.http.get<Maquillage[]>(url);
-      }
-      
+    const url = `${this.apiURL}/prodCat/${idType}`;
+    return this.http.get<Maquillage[]>(url);
+  }
 
+  rechercherParNom(nom: string): Observable<Maquillage[]> {
+    const url = `${this.apiURL}/prodsByName/${nom}`;
+    return this.http.get<Maquillage[]>(url);
+  }
+
+  ajoutertype(type: TypeMaquillage): Observable<TypeMaquillage> {
+    return this.http.post<TypeMaquillage>(this.apiURLCat, type, httpOptions);
+  }
+  modifierType(type: TypeMaquillage): Observable<TypeMaquillage> {
+  return this.http.put<TypeMaquillage>(
+    `${this.apiURLCat}/${type.idType}`,
+    type,
+    httpOptions
+  );
+}
+
+
+  
 }

@@ -1,4 +1,5 @@
-import { Component , OnInit  } from '@angular/core';
+
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Maquillage } from '../model/maquillage.model';
@@ -10,9 +11,9 @@ import { MaquillageService } from '../services/maquillage.service';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './recherche-partype.html',
-  styles: ``,
+  styles: [],
 })
-export class RecherchePartype  implements OnInit {
+export class RecherchePartype implements OnInit {
 
   maquillages!: Maquillage[];
   idType!: number;
@@ -20,18 +21,36 @@ export class RecherchePartype  implements OnInit {
 
   constructor(private maquillageService: MaquillageService) {}
 
-ngOnInit() : void {
+  ngOnInit(): void {
 
-  this.maquillageService.listeTypes().subscribe ( ts => {
-    this.types = ts._embedded.types;
-    console.log(ts);
-  });
-}
+    this.types = this.maquillageService.types;
 
-onTypeChange() {
-  this.maquillageService.rechercherPartype(this.idType).subscribe(maqs => {
-    this.maquillages = maqs;});
-}
-}
+    this.maquillageService.listeTypes().subscribe({
+      next: ts => {
+        if (ts._embedded && ts._embedded.types) {
+          this.types = ts._embedded.types;
+        }
+        console.log('Types :', this.types);
+      },
+      error: err => {
+        console.log('Erreur types :', err);
+      }
+    });
 
-  
+    this.maquillageService.listeMaquillages().subscribe(maqs => {
+      this.maquillages = maqs;
+      console.log('Tous les maquillages :', this.maquillages);
+    });
+  }
+
+  onTypeChange() {
+
+    console.log('Type choisi :', this.idType);
+
+    this.maquillages = this.maquillageService.maquillages.filter(
+      m => Number(m.type?.idType) === Number(this.idType)
+    );
+
+    console.log('Résultat recherche :', this.maquillages);
+  }
+}

@@ -27,8 +27,11 @@ export class ModifierMaquillage implements OnInit {
 ngOnInit(): void {
 this.maquillageService.listeTypes().subscribe(ts => {
   this.types = ts._embedded.types;
-});  this.currentMaquillage = this.maquillageService.consulterMaquillage(this.activatedRoute.snapshot.params['id']);
-  this.updatedTypeId=this.currentMaquillage.type.idType;
+});  
+this.currentMaquillage = this.maquillageService.consulterMaquillage(
+  this.activatedRoute.snapshot.params['id']);
+  
+  this.updatedTypeId=this.currentMaquillage.type.idType!;
 }
 
 
