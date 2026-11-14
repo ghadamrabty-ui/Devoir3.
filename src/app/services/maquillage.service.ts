@@ -1,27 +1,20 @@
-
 import { Injectable } from '@angular/core';
 import { Maquillage } from '../model/maquillage.model';
 import { TypeMaquillage } from '../model/type.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { TypeWrapper } from '../model/type.wrapper';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
 
 @Injectable({
   providedIn: 'root',
 })
 export class MaquillageService {
+
   maquillages: Maquillage[];
   maquillage!: Maquillage;
   types: TypeMaquillage[];
 
-  apiURL: string = 'http://localhost:8080/produits/api';
-  apiURLCat: string = 'http://localhost:8081/produits/type';
+  constructor() {
 
-  constructor(private http: HttpClient) {
     this.types = [
       { idType: 1, nomType: 'Fond de teint' },
       { idType: 2, nomType: 'Rouge à lèvres' },
@@ -94,48 +87,68 @@ export class MaquillageService {
   }
 
   consulterMaquillage(id: number): Maquillage {
-    this.maquillage = this.maquillages.find((m) => m.idMaquillage == id)!;
+    this.maquillage = this.maquillages.find(
+      (m) => m.idMaquillage == id
+    )!;
     return this.maquillage;
   }
 
-  updateMaquillage(m: Maquillage): Observable<Maquillage> {
-  return this.http.put<Maquillage>(
-    `${this.apiURL}/${m.idMaquillage}`,
-    m,
-    httpOptions
-  );
-}
+  // UPDATE LOCAL
+  updateMaquillage(m: Maquillage) {
+    const index = this.maquillages.findIndex(
+      maq => maq.idMaquillage === m.idMaquillage
+    );
 
-listeTypes(): Observable<TypeWrapper> {
-  return this.http.get<TypeWrapper>(this.apiURLCat);
-}
+    if (index !== -1) {
+      this.maquillages[index] = m;
+    }
+  }
 
+  // LISTE TYPES LOCALE
+  listeTypes(): Observable<TypeMaquillage[]> {
+    return of(this.types);
+  }
 
   consulterType(id: number): TypeMaquillage {
     return this.types.find(t => t.idType == id)!;
   }
 
+  // RECHERCHE LOCALE PAR TYPE
   rechercherPartype(idType: number): Observable<Maquillage[]> {
-    const url = `${this.apiURL}/prodCat/${idType}`;
-    return this.http.get<Maquillage[]>(url);
+
+    const result = this.maquillages.filter(
+      m => m.type.idType === idType
+    );
+
+    return of(result);
   }
 
+  // RECHERCHE LOCALE PAR NOM
   rechercherParNom(nom: string): Observable<Maquillage[]> {
-    const url = `${this.apiURL}/prodsByName/${nom}`;
-    return this.http.get<Maquillage[]>(url);
+
+    const result = this.maquillages.filter(
+      m => m.nomProduit
+            .toLowerCase()
+            .includes(nom.toLowerCase())
+    );
+
+    return of(result);
   }
 
-  ajoutertype(type: TypeMaquillage): Observable<TypeMaquillage> {
-    return this.http.post<TypeMaquillage>(this.apiURLCat, type, httpOptions);
+  // AJOUT TYPE LOCAL
+  ajoutertype(type: TypeMaquillage) {
+    this.types.push(type);
   }
-  modifierType(type: TypeMaquillage): Observable<TypeMaquillage> {
-  return this.http.put<TypeMaquillage>(
-    `${this.apiURLCat}/${type.idType}`,
-    type,
-    httpOptions
-  );
-}
 
+  // MODIFICATION TYPE LOCALE
+  modifierType(type: TypeMaquillage) {
 
-  
+    const index = this.types.findIndex(
+      t => t.idType === type.idType
+    );
+
+    if (index !== -1) {
+      this.types[index] = type;
+    }
+  }
 }

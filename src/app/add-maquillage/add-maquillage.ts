@@ -8,38 +8,40 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-maquillage',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './add-maquillage.html',
   styleUrl: './add-maquillage.css'
 })
 export class AddMaquillage implements OnInit {
 
   newMaquillage = new Maquillage();
-  message! : string;
-  types! : TypeMaquillage[];
-  newIdType! : number;
-  newType! : TypeMaquillage;
+  message!: string;
+  types!: TypeMaquillage[];
+  newIdType!: number;
+  newType!: TypeMaquillage;
 
-
-  constructor(private maquillageService: MaquillageService,
-              private router :Router
-   ) {}
-
-
+  constructor(
+    private maquillageService: MaquillageService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-this.maquillageService.listeTypes().subscribe(ts => {
-  this.types = ts._embedded.types;
-});  }
-
-
-
-  addMaquillage(){this.newType = this.maquillageService.consulterType(this.newIdType);
-    this.newMaquillage.type = this.newType;
-    this.maquillageService.ajouterMaquillage(this.newMaquillage);
-    this.router.navigate(['maquillage']);
-
+    this.maquillageService.listeTypes().subscribe(ts => {
+      this.types = ts;
+    });
   }
 
+  addMaquillage() {
 
+    this.newType =
+      this.maquillageService.consulterType(this.newIdType);
+
+    this.newMaquillage.type = this.newType;
+
+    this.maquillageService.ajouterMaquillage(
+      this.newMaquillage
+    );
+
+    this.router.navigate(['maquillage']);
+  }
 }

@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -23,13 +22,9 @@ export class RecherchePartype implements OnInit {
 
   ngOnInit(): void {
 
-    this.types = this.maquillageService.types;
-
     this.maquillageService.listeTypes().subscribe({
       next: ts => {
-        if (ts._embedded && ts._embedded.types) {
-          this.types = ts._embedded.types;
-        }
+        this.types = ts;
         console.log('Types :', this.types);
       },
       error: err => {
@@ -41,6 +36,7 @@ export class RecherchePartype implements OnInit {
       this.maquillages = maqs;
       console.log('Tous les maquillages :', this.maquillages);
     });
+
   }
 
   onTypeChange() {

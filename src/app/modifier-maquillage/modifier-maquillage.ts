@@ -8,40 +8,48 @@ import { TypeMaquillage } from '../model/type.model';
 
 @Component({
   selector: 'app-modifier-maquillage',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './modifier-maquillage.html',
   styleUrl: './modifier-maquillage.css'
 })
 export class ModifierMaquillage implements OnInit {
-  currentMaquillage  = new Maquillage();
 
-  types! : TypeMaquillage[];
- updatedTypeId! : number;
+  currentMaquillage = new Maquillage();
 
+  types!: TypeMaquillage[];
+  updatedTypeId!: number;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private router :Router,
-              private maquillageService: MaquillageService
-) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private maquillageService: MaquillageService
+  ) { }
 
-ngOnInit(): void {
-this.maquillageService.listeTypes().subscribe(ts => {
-  this.types = ts._embedded.types;
-});  
-this.currentMaquillage = this.maquillageService.consulterMaquillage(
-  this.activatedRoute.snapshot.params['id']);
-  
-  this.updatedTypeId=this.currentMaquillage.type.idType!;
-}
+  ngOnInit(): void {
 
+    this.maquillageService.listeTypes().subscribe(ts => {
+      this.types = ts;
+    });
 
+    this.currentMaquillage =
+      this.maquillageService.consulterMaquillage(
+        this.activatedRoute.snapshot.params['id']
+      );
 
+    this.updatedTypeId =
+      this.currentMaquillage.type.idType!;
+  }
 
-updateMaquillage() {
-  this.currentMaquillage.type=this.maquillageService.consulterType(this.updatedTypeId);
-     this.maquillageService.updateMaquillage(this.currentMaquillage);
-     this.router.navigate(['maquillage']);
-   }
+  updateMaquillage() {
 
+    this.currentMaquillage.type =
+      this.maquillageService.consulterType(this.updatedTypeId);
+
+    this.maquillageService.updateMaquillage(
+      this.currentMaquillage
+    );
+
+    this.router.navigate(['maquillage']);
+  }
 
 }
