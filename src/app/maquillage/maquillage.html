@@ -1,30 +1,47 @@
+<h1 style="color:rgb(14, 10, 10)">Gestion des maquillages</h1>
 <div class="container">
   <div class="card shadow mb-4">
     <div class="card-body">
-     <table class="table table-striped">
-        <tr> <th>Id</th><th>Référence</th> <th>Marque</th> <th>Produit</th> <th>Prix</th>  <th>Date Création</th> <th>Type</th></tr>
-         @for (maquillage of maquillages; track maquillage.idMaquillage)
-         {
 
-          <tbody >
-            <tr >
-                <td>{{maquillage.idMaquillage}}</td>
-               <td>{{maquillage.reference}}</td>
-               <td>{{maquillage.marque}}</td>
-               <td>{{maquillage.nomProduit}}</td>
-               <td>{{maquillage.prix}}</td>
-               <td>{{maquillage.dateCreation | date:'dd/MM/yyyy'}}</td>
-               <td>{{maquillage.type?.nomType}}</td>
-            @if(authService.isAdmin()) {
-            <td><a class="btn btn-danger" (click)="supprimerMaquillage(maquillage)">Supprimer</a></td>
-            <td><a class="btn btn-success" [routerLink]="['/modifier-maquillage',maquillage.idMaquillage]">Modifier</a></td>
+<h3>Nombre : {{ maquillages?.length }}</h3>      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Date</th>
+            <th>Type</th>
+            @if (authService.isAdmin()) {
+            
             }
-             </tr>
-          </tbody>
-         }
+          </tr>
+        </thead>
+<tbody>
+  <tr *ngFor="let maquillage of maquillages">
+    <td>{{ maquillage.idmaquillage }}</td>
+    <td>{{ maquillage.nommaquillage }}</td>
+    <td>{{ maquillage.prixmaquillage }}</td>
+    <td>{{ maquillage.datemaquillage | date:'dd/MM/yyyy' }}</td>
+    <td>{{ maquillage.type?.nomtyp }}</td>
 
+    <td *ngIf="authService.isAdmin()">
+      <button
+        class="btn btn-danger btn-sm me-2"
+        (click)="supprimerMaquillage(maquillage)">
+        Supprimer
+      </button>
 
-    </table>
+      <a
+        class="btn btn-success btn-sm"
+        [routerLink]="['/modifier-maquillage', maquillage.idmaquillage]">
+        Modifier
+      </a>
+    </td>
+  </tr>
+  
+</tbody>
+      </table>
+
     </div>
   </div>
 </div>

@@ -13,11 +13,12 @@
         <thead>
           <tr><th>Id</th><th>Nom type</th><th>Action</th></tr>
         </thead>
-        @for (t of types; track t.idType) {
+        @for (t of types; track t.idtyp) {
           <tbody>
             <tr>
-              <td>{{ t.idType }}</td>
-              <td>{{ t.nomType }}</td>
+              <td>{{ t.idtyp }}</td>
+              <td>{{ t.nomtyp }}</td>
+              
               <td><a class="btn btn-success" (click)="updateType(t)">Editer</a></td>
             </tr>
           </tbody>

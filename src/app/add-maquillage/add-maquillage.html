@@ -2,60 +2,38 @@
     <div>
       <h2>Ajouter un Maquillage :</h2>
     </div>
-         <form >
+         <form>
 
-             <div class="col-sm-2 col-md-2 col-lg-2">
-               <label >ID  Maquillage</label>
-               <input   type="text"  [(ngModel)]="newMaquillage.idMaquillage"
-                   name="idMaquillage" class="form-control">
-              </div>
-
-             <div class="col-sm-4 col-md-4 col-lg-4" >
-               <label >Référence</label>
-               <input  type="text" [(ngModel)]= "newMaquillage.reference"
-                   name="reference" class="form-control">
-             </div>
-
-             <div class="col-sm-4 col-md-4 col-lg-4" >
-               <label >Marque</label>
-               <input  type="text" [(ngModel)]= "newMaquillage.marque"
-                   name="marque" class="form-control">
-             </div>
-
-             <div class="col-sm-4 col-md-4 col-lg-4" >
-               <label >Nom Produit</label>
-               <input  type="text" [(ngModel)]= "newMaquillage.nomProduit"
-                   name="nomProduit" class="form-control">
+             <div class="col-sm-4 col-md-4 col-lg-4">
+               <label>Nom Produit</label>
+               <input type="text" [(ngModel)]="newMaquillage.nommaquillage"
+                   name="nommaquillage" class="form-control">
              </div>
 
              <div class="col-sm-2 col-md-2 col-lg-2">
-               <label >Prix</label>
-               <input type="number"   [(ngModel)]= "newMaquillage.prix"
-                   name="prix" class="form-control">
+               <label>Prix</label>
+               <input type="number" [(ngModel)]="newMaquillage.prixmaquillage"
+                   name="prixmaquillage" class="form-control">
              </div>
 
              <div class="col-sm-4 col-md-4 col-lg-4">
-                 <label >Date création</label>
-                 <input type="date"  [(ngModel)]= "newMaquillage.dateCreation"
-                     name="dateCreation" class="form-control">
+                 <label>Date création</label>
+                 <input type="date" [(ngModel)]="newMaquillage.datemaquillage"
+                     name="datemaquillage" class="form-control">
              </div>
-
-            <div class="col-sm-4 col-md-4 col-lg-4">
-              <label>Type</label>
-
-              <select class="form-control form-control-lg" id="idType" name="idType" [(ngModel)]="newIdType">
-                 @for(t of types; track t.idType){
-                   <option  [value]="t.idType">  {{t.nomType}}
-                    </option>
-                  }
-              </select>
-            </div>
-
-
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <label>Type</label>
+  <select class="form-control" [(ngModel)]="newIdType" name="idType">
+    <option [ngValue]="null" disabled>-- Choisir un type --</option>
+    <option *ngFor="let t of types" [ngValue]="t.idtyp">
+      {{ t.nomtyp }}
+    </option>
+  </select>
+</div>
+   
        <div class="mt-2">
-  <button type="submit" (click)="addMaquillage()" class="btn btn-success">Ajouter</button>
+  <button type="button" (click)="addMaquillage()" class="btn btn-success">Ajouter</button>
        </div>
-
 
          </form>
 </div>

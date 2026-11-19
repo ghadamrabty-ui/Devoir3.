@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { MaquillageService } from '../services/maquillage.service';
 import { TypeMaquillage } from '../model/type.model';
 import { UpdateType } from '../updatetypes/updatetypes';
-import { Observable } from 'rxjs';
 
 @Component({
   imports: [CommonModule, UpdateType],
   selector: 'app-liste-types',
-  styles: ``,
+  styles: [``],
   templateUrl: './liste-types.html',
 })
 export class ListeTypes implements OnInit {
 
   types!: TypeMaquillage[];
-  updatedType: TypeMaquillage = { idType: 0, nomType: '' };
+  updatedType: TypeMaquillage = { idtyp: null, nomtyp: '' };
   ajout: boolean = true;
 
   constructor(private maquillageService: MaquillageService) { }
@@ -23,36 +22,26 @@ export class ListeTypes implements OnInit {
     this.chargerTypes();
   }
 
-  chargerTypes(): void {
-  this.maquillageService.listeTypes().subscribe({
-    next: (reponse) => {
-      const donnees = reponse as unknown as
-        | TypeMaquillage[]
-        | { _embedded?: { types?: TypeMaquillage[] } };
-
-      this.types = Array.isArray(donnees)
-        ? donnees
-        : donnees._embedded?.types ?? [];
-
-      console.log('Types reçus par le serveur :', reponse);
-      console.log('Types affichés dans le tableau :', this.types);
-    },
-    error: (erreur) => {
-      console.error('Erreur pendant le chargement des types :', erreur);
-    },
+  chargerTypes() {
+  this.maquillageService.listeTypes().subscribe(response => {
+    this.types = response;
   });
 }
-
+  
 
   typeUpdated(type: TypeMaquillage) {
-    if (this.ajout) {
-      this.maquillageService.ajoutertype(type);
-    } else {
-      this.maquillageService.modifierType(type);
-    }
-    this.chargerTypes();
-    this.updatedType = { idType: 0, nomType: '' };
-    this.ajout = true;
+    const requete = this.ajout
+      ? this.maquillageService.ajouterType(type)
+      : this.maquillageService.modifierType(type);
+
+    requete.subscribe({
+      next: () => {
+        this.chargerTypes();
+        this.updatedType = { idtyp: null, nomtyp: '' };
+        this.ajout = true;
+      },
+      
+    });
   }
 
   updateType(type: TypeMaquillage) {

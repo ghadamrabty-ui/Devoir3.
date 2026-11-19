@@ -10,43 +10,50 @@ import { MaquillageService } from '../services/maquillage.service';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './recherche-partype.html',
-  styles: [],
+  styles: []
 })
 export class RecherchePartype implements OnInit {
 
-  maquillages!: Maquillage[];
-  idType!: number;
-  types!: TypeMaquillage[];
+  maquillages: Maquillage[] = [];
+  tousLesMaquillages: Maquillage[] = [];
+  types: TypeMaquillage[] = [];
+  idType: number | null = null;
 
   constructor(private maquillageService: MaquillageService) {}
 
   ngOnInit(): void {
 
     this.maquillageService.listeTypes().subscribe({
-      next: ts => {
+      next: (ts) => {
         this.types = ts;
-        console.log('Types :', this.types);
+        console.log('Types = ', this.types);
       },
-      error: err => {
-        console.log('Erreur types :', err);
+      error: (err) => {
+        console.error('Erreur types :', err);
       }
     });
 
-    this.maquillageService.listeMaquillages().subscribe(maqs => {
-      this.maquillages = maqs;
-      console.log('Tous les maquillages :', this.maquillages);
+    this.maquillageService.listeMaquillages().subscribe({
+      next: (maqs) => {
+        this.tousLesMaquillages = maqs;
+        this.maquillages = maqs;
+      },
+      error: (err) => {
+        console.error('Erreur maquillages :', err);
+      }
     });
-
   }
 
-  onTypeChange() {
+  onTypeChange(): void {
 
-    console.log('Type choisi :', this.idType);
+    if (this.idType == null) {
+      this.maquillages = this.tousLesMaquillages;
+      return;
+    }
 
-    this.maquillages = this.maquillageService.maquillages.filter(
-      m => Number(m.type?.idType) === Number(this.idType)
+    this.maquillages = this.tousLesMaquillages.filter(
+      m => m.type?.idtyp == this.idType
     );
-
-    console.log('Résultat recherche :', this.maquillages);
   }
+
 }

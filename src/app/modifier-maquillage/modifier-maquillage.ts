@@ -1,55 +1,73 @@
 import { Component, OnInit } from '@angular/core';
-import { Maquillage } from '../model/maquillage.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MaquillageService } from '../services/maquillage.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { Maquillage } from '../model/maquillage.model';
 import { TypeMaquillage } from '../model/type.model';
+import { MaquillageService } from '../services/maquillage.service';
 
 @Component({
   selector: 'app-modifier-maquillage',
-  imports: [FormsModule, CommonModule],
-  templateUrl: './modifier-maquillage.html',
-  styleUrl: './modifier-maquillage.css'
+  standalone: true,
+  imports: [FormsModule, CommonModule, RouterLink],
+  templateUrl: './modifier-maquillage.html'
 })
-export class ModifierMaquillage implements OnInit {
+export class UpdateMaquillageComponent implements OnInit {
 
   currentMaquillage = new Maquillage();
 
-  types!: TypeMaquillage[];
-  updatedTypeId!: number;
+  types: TypeMaquillage[] = [];
+  modifiedTypeId: number | null = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private maquillageService: MaquillageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
 
-    this.maquillageService.listeTypes().subscribe(ts => {
-      this.types = ts;
+    this.maquillageService.listeTypes().subscribe({
+      next: (types) => {
+        this.types = types;
+        console.log('Types =', this.types);
+      },
+      error: (err) => {
+        console.error(err);
+      }
     });
 
-    this.currentMaquillage =
-      this.maquillageService.consulterMaquillage(
-        this.activatedRoute.snapshot.params['id']
-      );
+    const id = this.activatedRoute.snapshot.params['id'];
 
-    this.updatedTypeId =
-      this.currentMaquillage.type.idType!;
+    this.maquillageService.consulterMaquillage(id).subscribe({
+      next: (maq) => {
+        this.currentMaquillage = maq;
+        this.modifiedTypeId = maq.type?.idtyp ?? null;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
-  updateMaquillage() {
+  updateMaquillage(): void {
 
-    this.currentMaquillage.type =
-      this.maquillageService.consulterType(this.updatedTypeId);
+    const typeSelectionne =
+      this.types.find(t => t.idtyp == this.modifiedTypeId);
 
-    this.maquillageService.updateMaquillage(
-      this.currentMaquillage
-    );
+    if (typeSelectionne) {
+      this.currentMaquillage.type = typeSelectionne;
+    }
 
-    this.router.navigate(['maquillage']);
+    this.maquillageService.updateMaquillage(this.currentMaquillage)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/maquillage']);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
   }
-
 }

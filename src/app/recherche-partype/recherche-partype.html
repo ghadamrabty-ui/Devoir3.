@@ -1,21 +1,20 @@
-
 <div class="container">
 
   <div class="col-sm-4 col-md-4 col-lg-4 mb-4">
     <label>Types</label>
 
     <select class="form-control form-control-lg"
-      id="idType" name="idType"
-      [(ngModel)]="idType"
-      (change)="onTypeChange()">
+            id="idType" name="idType"
+            [(ngModel)]="idType"
+            (change)="onTypeChange()">
 
-      <option [ngValue]="undefined" disabled>
-       Choisir un type 
+      <option [ngValue]="null" disabled>
+        Choisir un type
       </option>
 
-      @for (t of types; track t.idType) {
-        <option [ngValue]="t.idType">
-          {{ t.nomType }}
+      @for (t of types; track t.idtyp) {
+        <option [ngValue]="t.idtyp">
+          {{ t.nomtyp }}
         </option>
       }
     </select>
@@ -31,8 +30,6 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>Référence</th>
-              <th>Marque</th>
               <th>Produit</th>
               <th>Prix</th>
               <th>Date Création</th>
@@ -41,15 +38,13 @@
           </thead>
 
           <tbody>
-            @for (maquillage of maquillages; track maquillage.idMaquillage) {
+            @for (maquillage of maquillages; track maquillage.idmaquillage) {
               <tr>
-                <td>{{ maquillage.idMaquillage }}</td>
-                <td>{{ maquillage.reference }}</td>
-                <td>{{ maquillage.marque }}</td>
-                <td>{{ maquillage.nomProduit }}</td>
-                <td>{{ maquillage.prix }}</td>
-                <td>{{ maquillage.dateCreation | date:'dd/MM/yyyy' }}</td>
-                <td>{{ maquillage.type?.nomType }}</td>
+                <td>{{ maquillage.idmaquillage }}</td>
+                <td>{{ maquillage.nommaquillage }}</td>
+                <td>{{ maquillage.prixmaquillage }}</td>
+                <td>{{ maquillage.datemaquillage | date:'dd/MM/yyyy' }}</td>
+                <td>{{ maquillage.type?.nomtyp }}</td>
               </tr>
             }
           </tbody>

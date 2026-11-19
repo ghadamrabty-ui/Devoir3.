@@ -1,5 +1,4 @@
-
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TypeMaquillage } from '../model/type.model';
 
@@ -8,19 +7,19 @@ import { TypeMaquillage } from '../model/type.model';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './updatetypes.html',
-  styles: [],
+  styles: []
 })
-export class UpdateType implements OnInit {
+export class UpdateType {
 
   @Input() type!: TypeMaquillage;
   @Input() ajout!: boolean;
   @Output() typeUpdated = new EventEmitter<TypeMaquillage>();
 
-  ngOnInit(): void {
-    console.log('ngOnInit du composant UpdateType ', this.type);
-  }
+  saveType(): void {
 
-  saveType() {
-    this.typeUpdated.emit(this.type);
-  }
+  console.log("TYPE ENVOYE =", this.type);
+  console.log("NOM =", this.type.nomtyp);
+
+  this.typeUpdated.emit(this.type);
+}
 }

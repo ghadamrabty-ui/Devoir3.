@@ -1,10 +1,9 @@
-
 <form>
-  <div [hidden]="ajout" >
+  <div [hidden]="ajout">
     <label>ID Type</label>
     <input type="text"
-      [(ngModel)]="type.idType"
-      name="idType"
+      [(ngModel)]="type.idtyp"
+      name="idtyp"
       class="form-control w-25"
       readonly>
   </div>
@@ -12,15 +11,15 @@
   <div>
     <label>Nom Type</label>
     <input type="text"
-      [(ngModel)]="type.nomType"
-      name="nomType"
+      [(ngModel)]="type.nomtyp"
+      name="nomtyp"
       class="form-control"
       placeholder="Entrez un nom de type...">
   </div>
 
   <div class="mt-2">
-    <button type="submit"
-      [disabled]="!type.nomType"
+    <button type="button"
+      [disabled]="!type.nomtyp?.trim()"
       class="btn btn-success"
       (click)="saveType()">
       {{ ajout ? 'Ajouter' : 'Modifier' }}

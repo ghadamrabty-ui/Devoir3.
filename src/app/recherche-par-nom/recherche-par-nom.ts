@@ -3,53 +3,26 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Maquillage } from '../model/maquillage.model';
 import { MaquillageService } from '../services/maquillage.service';
-import { searchFilterPipe } from '../search-filter.pipe';
-
-
+import { SearchFilterPipe } from '../search-filter.pipe';
 
 @Component({
   selector: 'app-recherche-par-nom',
-  imports: [FormsModule,CommonModule,searchFilterPipe],
+  standalone: true,
+  imports: [FormsModule, CommonModule, SearchFilterPipe],
   templateUrl: './recherche-par-nom.html',
-  styles: ``
+  styles: []
 })
 export class RechercheParNomComponent implements OnInit {
 
-  nomProduit! :string;
-  maquillages! : Maquillage[];
-  allMaquillages! : Maquillage[];
-    searchTerm! : string;
+  maquillages: Maquillage[] = [];
+  searchTerm = '';
 
-
-  constructor(private maquillageService:MaquillageService ){}
-
+  constructor(private maquillageService: MaquillageService) {}
 
   ngOnInit(): void {
-      this.maquillageService.listeMaquillages().subscribe(maquillages => {
-          console.log(maquillages);
-          this.maquillages = maquillages;
-
-});
-   //this.maquillages=[];
-
+    this.maquillageService.listeMaquillages().subscribe({
+      next: maquillages => this.maquillages = maquillages,
+      error: err => console.error('Erreur chargement :', err)
+    });
   }
-
-  rechercherProds()
-  {
-    
-     if (this.nomProduit)
-      
-      this.maquillageService.rechercherParNom(this.nomProduit).subscribe(maquillages => {
-        console.log(maquillages);
-        this.maquillages = maquillages;
-      });
-    }
-
-  onKeyUp(filterText : String){
-          this.maquillages = this.allMaquillages.filter(item =>
-              item.nomProduit.toLowerCase().includes(filterText.toLowerCase()));
-      }
-  }
-
-
-
+}
